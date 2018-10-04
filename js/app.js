@@ -21,7 +21,7 @@ class Enemy {
         }
     }
     // Draw the enemy on the screen, required method for game
-    render = function() {
+    render () {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 };
@@ -30,13 +30,26 @@ class Enemy {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+class Player {
+    constructor(){
+        this.x = 300;
+        this.y = 300;
+        this.sprite = 'images/char-pink-girl.png';
+    }
+    update (){};
+    render(){
+        
+    }
+    
+}
 
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-allEnemies = [new Enemy];
+let allEnemies = [new Enemy];
+let player = new Player();
 
 
 // This listens for key presses and sends the keys to your
