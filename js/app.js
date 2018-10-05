@@ -34,11 +34,32 @@ class Player {
     constructor(){
         this.x = 300;
         this.y = 300;
-        this.sprite = 'images/char-pink-girl.png';
+        this.sprite = 'images/char-boy.png';
+    }
+    handleInput(key){
+        const movement = 50;
+        switch (key) {
+            case 'left':
+                this.x -= movement;
+                break;
+            case 'right':
+                this.x +=movement;
+                break;
+            case 'up':
+                this.y -= movement;
+                break;
+            case 'down':
+                this.y += movement;
+                break;
+            default:
+                
+                break;
+        }
+        this.update();
     }
     update (){};
     render(){
-        
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
     
 }
