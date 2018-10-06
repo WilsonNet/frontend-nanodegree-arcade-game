@@ -22,7 +22,7 @@ class Enemy {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
-        const movementX = 10 * dt;
+        const movementX = 35 * dt;
         this.x += movementX;
         if (this.x > 530) {
             this.x = 0;
@@ -43,6 +43,7 @@ class Enemy {
 // a handleInput() method.
 class Player {
     constructor(enemies) {
+        this.dead = false;
         this.x = 300;
         this.y = 300;
         this.sprite = 'images/char-boy.png';
@@ -81,22 +82,30 @@ class Player {
         this.update();
     }
     update() {
-        /*this.enemies.forEach(enemy => {
-            this.checkDeath(enemy.x, enemy.y);
-        });*/
+        this.enemies.forEach(enemy => {
+            this.checkDeath(enemy);
+        });
+        if (this.dead) {
+            this.x = 300;
+            this.y = 300;
+            this.colliderPosY = this.y + 120; //Compensating for the transparent pixels
+            this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
+            this.dead = false;
+        }
     };
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
-    /*checkDeath(enemyX, enemyY) {
-        const yCheck = this.y > enemyY - 50 && this.y < enemyY + 50;
-        const xCheck = this.x > enemyX - 50 && this.x < enemyX + 50;
-        if (xCheck && yCheck) {
-            this.x = 300;
-            this.y = 300;
+    checkDeath(enemy) {
+        const yBottomCheck = this.colliderPosY + this.colliderY > enemy.colliderPosY && this.colliderPosY + this.colliderY < enemy.colliderPosY + enemy.colliderY;
+        const yTopCheck = this.colliderPosY > enemy.colliderPosY && this.colliderPosY < enemy.colliderPosY + enemy.colliderY;
+        const xRightCheck = this.colliderPosX + this.colliderX > enemy.colliderPosX && this.colliderPosX + this.colliderPosX < enemy.colliderPosX + enemy.colliderX;
+        const xLeftCheck = this.colliderPosX > enemy.colliderPosX && this.colliderPosX < enemy.colliderPosX + enemy.colliderX;
+        if ((yBottomCheck || yTopCheck) && (xRightCheck || xLeftCheck)) {
+            this.dead = true;
         }
-    }*/
+    }
 
 }
 
