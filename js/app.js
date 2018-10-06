@@ -1,12 +1,13 @@
+
 // Enemies our player must avoid
 class Enemy {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    constructor(){
+    constructor(height){
         this.x = 0;
-        this.y = 20;
+        this.y = height;
         this.sprite = 'images/enemy-bug.png';
     }
     // Update the enemy's position, required method for game
@@ -15,7 +16,7 @@ class Enemy {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-        this.x += 3*dt;
+        this.x += 10*dt;
         if (this.x>530){
             this.x = 0;
         }
@@ -31,25 +32,29 @@ class Enemy {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Player {
-    constructor(){
+    constructor(enemies){
         this.x = 300;
         this.y = 300;
         this.sprite = 'images/char-boy.png';
+        /** @type {Enemy[]} */
+        this.enemies = enemies;
     }
     handleInput(key){
-        const movement = 50;
+        const movementX = 101,
+        movementY = 86;
+
         switch (key) {
             case 'left':
-                this.x -= movement;
+                this.x -= movementX;
                 break;
             case 'right':
-                this.x +=movement;
+                this.x +=movementX;
                 break;
             case 'up':
-                this.y -= movement;
+                this.y -= movementY;
                 break;
             case 'down':
-                this.y += movement;
+                this.y += movementY;
                 break;
             default:
                 
@@ -57,9 +62,19 @@ class Player {
         }
         this.update();
     }
-    update (){};
+    update (){
+            this.enemies.forEach(enemy => {
+            this.checkDeath(enemy.x, enemy.y);
+        });   
+    };
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+    checkDeath(enemyX, enemyY){
+        if (this.X > enemyX - 50 && thisX < enemyX + 50){
+            this.x = 300;
+            this.y = 300;
+        }
     }
     
 }
@@ -69,9 +84,18 @@ class Player {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let allEnemies = [new Enemy];
-let player = new Player();
+let allEnemies = [new Enemy(50), new Enemy(132), new Enemy(215)];
+let player = new Player(allEnemies);
 
+
+//Prevent arrow scrolling
+
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
