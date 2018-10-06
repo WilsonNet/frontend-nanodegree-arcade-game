@@ -11,9 +11,10 @@ class Enemy {
         this.y = height * this.tileY + 58;
         this.sprite = 'images/enemy-bug.png';
         this.colliderPosY = this.y + 76; //Compensating for the transparent pixels
+        this.colliderPosX = this.x;
         this.colliderX = 100;
         this.colliderY = 69;
-        
+
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -21,15 +22,18 @@ class Enemy {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
-        this.x += 10 * dt;
+        const movementX = 10 * dt;
+        this.x += movementX;
         if (this.x > 530) {
             this.x = 0;
         }
+        this.colliderPosX = this.x;
+
     }
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        ctx.strokeRect(this.x, this.colliderPosY, this.colliderX, this.colliderY);
+        ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
 };
 
@@ -42,25 +46,33 @@ class Player {
         this.x = 300;
         this.y = 300;
         this.sprite = 'images/char-boy.png';
+        this.colliderPosY = this.y + 120; //Compensating for the transparent pixels
+        this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
+        this.colliderX = 55;
+        this.colliderY = 30;
         /** @type {Enemy[]} */
         this.enemies = enemies;
     }
     handleInput(key) {
-        const movementX = 101,
-            movementY = 86;
+        const movementX = 101, //Tile width
+            movementY = 83; // Tile height
 
         switch (key) {
             case 'left':
                 this.x -= movementX;
+                this.colliderPosX -= movementX;
                 break;
             case 'right':
                 this.x += movementX;
+                this.colliderPosX += movementX;
                 break;
             case 'up':
                 this.y -= movementY;
+                this.colliderPosY -= movementY;
                 break;
             case 'down':
                 this.y += movementY;
+                this.colliderPosY += movementY;
                 break;
             default:
 
@@ -75,6 +87,7 @@ class Player {
     };
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
     /*checkDeath(enemyX, enemyY) {
         const yCheck = this.y > enemyY - 50 && this.y < enemyY + 50;
