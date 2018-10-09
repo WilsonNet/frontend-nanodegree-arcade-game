@@ -100,7 +100,7 @@ class Player {
     checkDeath(enemy) {
         const yBottomCheck = this.colliderPosY + this.colliderY > enemy.colliderPosY && this.colliderPosY + this.colliderY < enemy.colliderPosY + enemy.colliderY;
         const yTopCheck = this.colliderPosY > enemy.colliderPosY && this.colliderPosY < enemy.colliderPosY + enemy.colliderY;
-        const xRightCheck = this.colliderPosX + this.colliderX > enemy.colliderPosX && this.colliderPosX + this.colliderPosX < enemy.colliderPosX + enemy.colliderX;
+        const xRightCheck = this.colliderPosX + this.colliderX > enemy.colliderPosX && this.colliderPosX + this.colliderX < enemy.colliderPosX + enemy.colliderX;
         const xLeftCheck = this.colliderPosX > enemy.colliderPosX && this.colliderPosX < enemy.colliderPosX + enemy.colliderX;
         if ((yBottomCheck || yTopCheck) && (xRightCheck || xLeftCheck)) {
             this.dead = true;
