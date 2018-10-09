@@ -16,7 +16,7 @@ class Enemy {
         this.movementX = this.getSpeed();
     }
     getSpeed() {
-        return (Math.random() * 150 + 120);
+        return (Math.random() * 300 + 50);
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -32,14 +32,12 @@ class Enemy {
             this.colliderPosY = this.y + 76; //Compensating for the transparent pixels 
         }
         this.colliderPosX = this.x;
-
-
     }
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         //Hitbox visualization
-        ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
+        //ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
 };
 
@@ -93,9 +91,6 @@ class Player {
                     this.colliderPosY += movementY;
                 }
                 break;
-            default:
-
-                break;
         }
         this.update();
     }
@@ -110,10 +105,19 @@ class Player {
             this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
             this.dead = false;
         }
+        if (this.y < 50){
+            this.x = 200;
+            this.y = 383;
+            this.colliderPosY = this.y + 120; //Compensating for the transparent pixels
+            this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
+            score +=1;
+            console.log(score);
+        }
     };
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
+        //Hitbox visualization
+        // ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
     checkDeath(enemy) {
         const yBottomCheck = this.colliderPosY + this.colliderY > enemy.colliderPosY && this.colliderPosY + this.colliderY < enemy.colliderPosY + enemy.colliderY;
@@ -122,6 +126,7 @@ class Player {
         const xLeftCheck = this.colliderPosX > enemy.colliderPosX && this.colliderPosX < enemy.colliderPosX + enemy.colliderX;
         if ((yBottomCheck || yTopCheck) && (xRightCheck || xLeftCheck)) {
             this.dead = true;
+            score = 0;
         }
     }
 
@@ -130,10 +135,11 @@ class Player {
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let allEnemies = [new Enemy(0), new Enemy(1), new Enemy(2), new Enemy(0), new Enemy(1), new Enemy(2)];
+let allEnemies = [new Enemy(0), new Enemy(1), new Enemy(2), new Enemy(0), new Enemy(1)];
 // Place the player object in a variable called player
 let player = new Player(allEnemies);
 
+let score = 0;
 
 //Prevent arrow scrolling
 window.addEventListener("keydown", function (e) {
