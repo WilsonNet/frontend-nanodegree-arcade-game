@@ -181,5 +181,6 @@ var Engine = (function(global) {
      * object when run in a browser) so that developers can use it more easily
      * from within their app.js files.
      */
+    global.canvas = canvas;
     global.ctx = ctx;
 })(this);

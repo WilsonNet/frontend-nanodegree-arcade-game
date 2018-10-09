@@ -1,4 +1,3 @@
-
 // Enemies our player must avoid
 class Enemy {
     // Variables applied to each of our instances go here,
@@ -14,7 +13,10 @@ class Enemy {
         this.colliderPosX = this.x;
         this.colliderX = 100;
         this.colliderY = 69;
-
+        this.movementX = this.getSpeed();
+    }
+    getSpeed() {
+        return (Math.random() * 150 + 120);
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -22,17 +24,21 @@ class Enemy {
         // You should multiply any movement by the dt parameter
         // which will ensure the game runs at the same speed for
         // all computers.
-        const movementX = 35 * dt;
-        this.x += movementX;
-        if (this.x > 530) {
+        this.x += this.movementX * dt;;
+        if (this.x > canvas.width) {
             this.x = 0;
+            this.movementX = this.getSpeed();
+            this.y = Math.floor((Math.random() * 3)) * this.tileY + 58;
+            this.colliderPosY = this.y + 76; //Compensating for the transparent pixels 
         }
         this.colliderPosX = this.x;
+
 
     }
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        //Hitbox visualization
         ctx.strokeRect(this.colliderPosX, this.colliderPosY, this.colliderX, this.colliderY);
     }
 };
@@ -44,8 +50,8 @@ class Enemy {
 class Player {
     constructor(enemies) {
         this.dead = false;
-        this.x = 300;
-        this.y = 300;
+        this.x = 200;
+        this.y = 383;
         this.sprite = 'images/char-boy.png';
         this.colliderPosY = this.y + 120; //Compensating for the transparent pixels
         this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
@@ -57,23 +63,35 @@ class Player {
     handleInput(key) {
         const movementX = 101, //Tile width
             movementY = 83; // Tile height
-
+        let destination;
         switch (key) {
             case 'left':
-                this.x -= movementX;
-                this.colliderPosX -= movementX;
+                destination = this.colliderPosX - movementX;
+                if (destination > 0) {
+                    this.x -= movementX;
+                    this.colliderPosX -= movementX;
+                }
                 break;
             case 'right':
-                this.x += movementX;
-                this.colliderPosX += movementX;
+                destination = this.colliderPosX + movementX;
+                if (destination < canvas.width) {
+                    this.x += movementX;
+                    this.colliderPosX += movementX;
+                }
                 break;
             case 'up':
-                this.y -= movementY;
-                this.colliderPosY -= movementY;
+            destination = this.colliderPosY - movementY - 50;
+                if (destination > 0) {
+                    this.y -= movementY;
+                    this.colliderPosY -= movementY;
+                }
                 break;
             case 'down':
-                this.y += movementY;
-                this.colliderPosY += movementY;
+            destination = this.colliderPosY + movementY + 50;
+                if (destination < canvas.height) {
+                    this.y += movementY;
+                    this.colliderPosY += movementY;
+                }
                 break;
             default:
 
@@ -86,8 +104,8 @@ class Player {
             this.checkDeath(enemy);
         });
         if (this.dead) {
-            this.x = 300;
-            this.y = 300;
+            this.x = 200;
+            this.y = 383;
             this.colliderPosY = this.y + 120; //Compensating for the transparent pixels
             this.colliderPosX = this.x + 25; //Compensating for the transparent pixels
             this.dead = false;
@@ -110,16 +128,14 @@ class Player {
 }
 
 
-
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
+let allEnemies = [new Enemy(0), new Enemy(1), new Enemy(2), new Enemy(0), new Enemy(1), new Enemy(2)];
 // Place the player object in a variable called player
-let allEnemies = [new Enemy(0), new Enemy(1), new Enemy(2)];
 let player = new Player(allEnemies);
 
 
 //Prevent arrow scrolling
-
 window.addEventListener("keydown", function (e) {
     // space and arrow keys
     if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
