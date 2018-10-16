@@ -12,7 +12,7 @@ class Enemy {
         //Enemy collider
         this.colliderPosY = this.y + 76; //Compensating for transparent pixels
         this.colliderPosX = this.x;
-        this.colliderX = 100; 
+        this.colliderX = 100;
         this.colliderY = 69;
         this.movementX = this.getSpeed();
     }
@@ -22,7 +22,7 @@ class Enemy {
     // Parameter: dt, a time delta between ticks
     update(dt) {
         // Multiplying by dt for a smoother result.
-        this.x += this.movementX * dt;;
+        this.x += this.movementX * dt;
         if (this.x > canvas.width) {
             this.x = 0;
             this.movementX = this.getSpeed();
@@ -41,7 +41,7 @@ class Enemy {
 //Player class
 class Player {
     /**
-     * 
+     *
      * @param {Enemy[]} enemies - An array with the enemies that Player needs to avoid.
      */
     constructor(enemies) {
